@@ -55,7 +55,7 @@ When creating the products, each product has a barcode that is then generated an
 ----------
 # Autor ✒️
 
-- Javier Pérez - Creación, investigación y codificación.
+- Javier Pérez - Creation, research and coding.
 -------
 
 # Venezuela 2024
