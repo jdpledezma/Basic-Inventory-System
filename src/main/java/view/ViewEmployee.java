@@ -1,8 +1,11 @@
 package view;
 
-import java.awt.Color;
-import java.awt.Font;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -10,8 +13,8 @@ import com.mysql.cj.xdevapi.Table;
 
 public class ViewEmployee extends JFrame {
 	private JButton saleBtn,exitBtn,addProductBtn,deleteProductBtn,billBtn,searchBtn,addClientBtn;
-	private JPanel leftPanel, rigthTopPanel;
-	private JLabel titleView,titleScreenSale,clientDni,clientFirstName,clientLastName,clientAddress,clientTelephone,dataProducts,codeProduct,nameProduct,stockProduct,priceProduct,cantityProduct, totalProduct;
+	private JPanel leftPanel, rigthTopPanel,homePanel;
+	private JLabel titleView,titleScreenSale,clientDni,clientFirstName,clientLastName,clientAddress,clientTelephone,dataProducts,codeProduct,nameProduct,stockProduct,priceProduct,cantityProduct, totalProduct,sectionTitle;
 	private JTextField clientDniTxt,clientFirstNameTxt,clientLastNameTxt,clientAddressTxt,clientTelephoneTxt,codeProductTxt,nameProductTxt,stockProductTxt,priceProductTxt,cantityProductTxt, totalProductTxt;
 	private JSeparator separator;
 	private JFrame screenSale = new JFrame();
@@ -64,9 +67,17 @@ public class ViewEmployee extends JFrame {
 		leftPanel.add(saleBtn);
 		leftPanel.add(exitBtn);
 		rigthTopPanel.add(nameCompany);
-		
+
+		homePanel = new JPanel();
+		String pathImg = "/home/jadape/Documentos/eclipse-workspace/BasicSystemInventory/src/main/java/resource/wallpaper.jpg";
+		sectionTitle = new JLabel(configImg(pathImg));
+
+
+		homePanel.setBounds(270,85, 630, 550);
+		homePanel.add(sectionTitle);
 		getContentPane().add(leftPanel);
 		getContentPane().add(rigthTopPanel);
+		getContentPane().add(homePanel);
 	}
 	
 	public JButton getSaleBtn() {
@@ -124,7 +135,25 @@ public class ViewEmployee extends JFrame {
 	public void setScreenSale(JFrame screenSale) {
 		this.screenSale = screenSale;
 	}
-	
+
+	public ImageIcon configImg( String Ruta){
+		try {
+			File file = new File(Ruta);
+			BufferedImage originalImage = ImageIO.read(file);
+
+			int newWidth = 630;
+			int newHeight = 550;
+
+			Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+
+			return new ImageIcon(scaledImage);
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return new ImageIcon();
+	}
 	
 	
 }

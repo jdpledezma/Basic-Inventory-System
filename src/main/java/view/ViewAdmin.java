@@ -1,10 +1,12 @@
 package view;
 
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
@@ -46,7 +48,7 @@ public class ViewAdmin extends JFrame{
 	private JLabel nameProduct,barcodeProduct,priceProduct,stockProduct,categoryProduct,searchProduct, nameCategory,nameSupplier,supplierInput,supplierCategory;
 	private JTextField nameCategoryTxt,nameSupplierTxt,categorySupplierTxt; 
 	private JButton addCategoryBtn, editCategoryBtn, deleteCategoryBtn, addSupplierBtn, editSupplierBtn, deleteSupplierBtn;
-	
+
 	public ViewAdmin(){
 		getContentPane().setLayout(null);
 		
@@ -106,10 +108,10 @@ public class ViewAdmin extends JFrame{
 		
 		homePanel.setBounds(270,85, 630, 550);
 		homePanel.setBackground(Color.BLACK);
-		sectionTitle.setText("Home");
-		sectionTitle.setBounds(15,20,150,40);
-		Font sectionTitleFont = new Font("Dialog", Font.BOLD,16);
-		sectionTitle.setFont(sectionTitleFont);
+		String pathImg = "/home/jadape/Documentos/eclipse-workspace/BasicSystemInventory/src/main/java/resource/wallpaper.jpg";
+
+		sectionTitle.setIcon(configImg(pathImg));
+		sectionTitle.setBounds(15,0,150,40);
 		separatorSection = new JSeparator();
 		separatorSection.setBounds(0, 60, 630, 10);
 		separatorSection.setForeground(Color.LIGHT_GRAY);
@@ -140,6 +142,25 @@ public class ViewAdmin extends JFrame{
 	
 	public void screenCategory() {
 			
+	}
+
+	public ImageIcon configImg( String Ruta){
+		try {
+			File file = new File(Ruta);
+			BufferedImage originalImage = ImageIO.read(file);
+
+			int newWidth = 630;
+			int newHeight = 550;
+
+			Image scaledImage = originalImage.getScaledInstance(newWidth, newHeight, Image.SCALE_SMOOTH);
+
+			return new ImageIcon(scaledImage);
+
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return new ImageIcon();
 	}
 	
 	public void screenSuppliers() {
