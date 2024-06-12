@@ -39,7 +39,7 @@ public class ModelPDF {
     
     public static void generatePDF(byte[] barcode_img, String name) throws DocumentException, MalformedURLException, IOException {
     	Document document = new Document(PageSize.A4);
-        PdfWriter.getInstance(document, new FileOutputStream("/home/jadape/Documentos/Universidad/Sexto Semestre/Lenguaje III/maven-archetype-quickstart/src/main/java/resource/product_barcode_" + name + ".pdf"));
+        PdfWriter.getInstance(document, new FileOutputStream("/home/jadape/Documentos/eclipse-workspace/BasicSystemInventory/src/main/java/resource/" + name + ".pdf"));
         document.open();
 
         PdfPTable table = new PdfPTable(1);

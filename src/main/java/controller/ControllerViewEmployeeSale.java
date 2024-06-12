@@ -166,25 +166,42 @@ public class ControllerViewEmployeeSale implements ActionListener {
 		viewEmployeeSale.getStockProductTxt().setText("");
 		viewEmployeeSale.getCantityProductTxt().setText("");
 	}
-	
-	public void deleteProductCart() {
-	    String codeProduct = viewEmployeeSale.getCodeProductTxt().getText();
-	    ArrayList<ModelProduct> products = cartShopping.getProducts(); // Get a copy
-	    Iterator<ModelProduct> iterator = products.iterator(); // Use iterator for removal
 
-	    while (iterator.hasNext()) {
-	        ModelProduct prod = iterator.next();
-	        if (prod.getBarcode().equals(codeProduct)) {
-	            if (prod.getCantity().equals("0")) {
-	                iterator.remove(); // Remove using iterator's method
-	                renderTable();
-	            } else {
-	                int quantity = Integer.parseInt(prod.getCantity());
-	                prod.setCantity(String.valueOf(quantity - 1));
-	                renderTable();
-	            }
-	        }
-	    }
+	public void deleteProductCart() {
+		String codeProduct = viewEmployeeSale.getCodeProductTxt().getText();
+
+		// 1. Check for empty code or cart
+		if (codeProduct.isEmpty() || cartShopping.getProducts().isEmpty()) {
+			// Handle the case where no product code is entered or the cart is empty
+			System.out.println("Please enter a product code or add products to your cart first.");
+			return;
+		}
+
+		// 2. Convert code to appropriate type (assuming barcode is a String)
+		String barcode = codeProduct; // Modify if barcode is an integer or other type
+
+		// 3. Iterate over cart and remove matching product(s)
+		ArrayList<ModelProduct> products = cartShopping.getProducts();
+		boolean productRemoved = false; // Flag to track if any product was removed
+		for (int i = 0; i < products.size(); i++) {
+			ModelProduct product = products.get(i);
+			if (product.getBarcode().equals(barcode)) {
+				int newCantity = Integer.parseInt(product.getCantity()) - 1;
+				product.setCantity(String.valueOf(newCantity));
+				if (product.getCantity().equals("0")) {
+					products.remove(i);
+				}
+				productRemoved = true;
+				System.out.println("Removed 1 item of product with code " + barcode + " from cart.");
+				renderTable();
+				break;
+			}
+		}
+
+		// 4. Handle no product found
+		if (!productRemoved) {
+			System.out.println("Product with code " + barcode + " not found in cart.");
+		}
 	}
 	
 	public void addUser() {
@@ -207,6 +224,13 @@ public class ControllerViewEmployeeSale implements ActionListener {
 		viewEmployeeSale.getClientLastNameTxt().setText("");
 		viewEmployeeSale.getClientAddressTxt().setText("");
 		viewEmployeeSale.getClientTelephoneTxt().setText("");
+		viewEmployeeSale.getNameProductTxt().setText("");
+		viewEmployeeSale.getCodeProductTxt().setText("");
+		viewEmployeeSale.getPriceProductTxt().setText("");
+		viewEmployeeSale.getStockProductTxt().setText("");
+		viewEmployeeSale.getCantityProductTxt().setText("");
+		viewEmployeeSale.getClientDniTxt().setText("");
+
 	}
 	
 	public void bill() {
@@ -215,8 +239,19 @@ public class ControllerViewEmployeeSale implements ActionListener {
 		ArrayList<ModelProduct> cartBill = cartShopping.getProducts();
 		LocalDateTime dateNow = LocalDateTime.now(); 
 		Double total = cartShopping.calculateTotal();
-		String newPdfFile = "/home/jadape/Documentos/Universidad/Sexto Semestre/Lenguaje III/maven-archetype-quickstart/src/main/java/resource/bill.pdf";
+		String newPdfFile = "/home/jadape/Documentos/eclipse-workspace/BasicSystemInventory/src/main/java/resource/bill.pdf";
 		modelPDF.generateBill(dniClient,nameClient,total,dateNow,newPdfFile,cartBill);
+		viewEmployeeSale.getClientFirstNameTxt().setText("");
+		viewEmployeeSale.getClientLastNameTxt().setText("");
+		viewEmployeeSale.getClientAddressTxt().setText("");
+		viewEmployeeSale.getClientTelephoneTxt().setText("");
+		viewEmployeeSale.getClientFirstNameTxt().setText("");
+		viewEmployeeSale.getClientLastNameTxt().setText("");
+		viewEmployeeSale.getClientAddressTxt().setText("");
+		viewEmployeeSale.getClientTelephoneTxt().setText("");
+		viewEmployeeSale.getClientDniTxt().setText("");
+		cartShopping.getProducts().clear();
+		renderTable();
 	};
 	
 	
@@ -249,6 +284,7 @@ public class ControllerViewEmployeeSale implements ActionListener {
 		}
 		
 		if(e.getSource() == viewEmployeeSale.getBillBtn()) {
+
 			ArrayList<ModelProduct> cart = cartShopping.getProducts();
 			bill();
 			cartShopping.updateStockBD(cart);
