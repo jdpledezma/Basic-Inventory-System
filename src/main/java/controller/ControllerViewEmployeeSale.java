@@ -44,48 +44,44 @@ public class ControllerViewEmployeeSale implements ActionListener {
 		viewEmployeeSale.setResizable(false);
 		viewEmployeeSale.setVisible(true);
 	}
-	
+
 	public void renderTable() {
-		  ArrayList<ModelProduct> cart = cartShopping.getProducts();
-		  viewEmployeeSale.getTableModelProducts().setRowCount(0);
+		ArrayList<ModelProduct> cart = cartShopping.getProducts();
+		viewEmployeeSale.getTableModelProducts().setRowCount(0);
 
-		  String[] product = new String[5];
-		  for (ModelProduct p : cart) {
-		    boolean productFound = false;
-		    for (int i = 0; i < viewEmployeeSale.getTableModelProducts().getRowCount(); i++) {
-		      String existingBarcode = (String) viewEmployeeSale.getTableModelProducts().getValueAt(i, 1);
-		      if (existingBarcode.equals(p.getBarcode())) {
-		        if (p.getCantity().equals(0)) {
-		        	viewEmployeeSale.getTableModelProducts().removeRow(i);
-		        } else {
-		          productFound = true;
-		          int existingQuantity = Integer.parseInt((String) viewEmployeeSale.getTableModelProducts().getValueAt(i, 4));
-		          int existingStock = Integer.parseInt((String) viewEmployeeSale.getTableModelProducts().getValueAt(i, 3));
-		          int newQuantity = existingQuantity + Integer.parseInt(p.getCantity());
-		          viewEmployeeSale.getTableModelProducts().setValueAt(String.valueOf(newQuantity), i, 4);
-		          viewEmployeeSale.getTableModelProducts().setValueAt(String.valueOf(existingStock - Integer.parseInt(p.getCantity())), i, 3);
-		        }
-		        break;
-		      }else {
-		    	  viewEmployeeSale.getTableModelProducts().removeRow(i);
-		      }
-		    }
-		    if (!productFound) {
-		      product[0] = p.getName();
-		      product[1] = p.getBarcode();
-		      product[2] = p.getPrice();
-		      product[3] = p.getStock();
-		      product[4] = String.valueOf(p.getCantity());
-		      viewEmployeeSale.getTableModelProducts().addRow(product);
-		    }
-		  }
+		String[] product = new String[5];
+		for (ModelProduct p : cart) {
+			boolean productFound = false;
+			for (int i = 0; i < viewEmployeeSale.getTableModelProducts().getRowCount(); i++) {
+				String existingBarcode = (String) viewEmployeeSale.getTableModelProducts().getValueAt(i, 1);
+				if (existingBarcode.equals(p.getBarcode())) {
+					productFound = true;
+					int existingQuantity = Integer.parseInt((String) viewEmployeeSale.getTableModelProducts().getValueAt(i, 4));
+					int existingStock = Integer.parseInt((String) viewEmployeeSale.getTableModelProducts().getValueAt(i, 3));
+					int newQuantity = existingQuantity + Integer.parseInt(p.getCantity());
+					viewEmployeeSale.getTableModelProducts().setValueAt(String.valueOf(newQuantity), i, 4);
+					viewEmployeeSale.getTableModelProducts().setValueAt(String.valueOf(existingStock - Integer.parseInt(p.getCantity())), i, 3);
+					break;
+				}
+			}
 
-		  double totalPrice = cartShopping.calculateTotal();
-		  viewEmployeeSale.getTotalProductTxt().setText(String.valueOf(totalPrice));
+			if (!productFound) {
+				product[0] = p.getName();
+				product[1] = p.getBarcode();
+				product[2] = p.getPrice();
+				product[3] = p.getStock();
+				product[4] = String.valueOf(p.getCantity());
+				viewEmployeeSale.getTableModelProducts().addRow(product);
+			}
 		}
 
+		double totalPrice = cartShopping.calculateTotal();
+		viewEmployeeSale.getTotalProductTxt().setText(String.valueOf(totalPrice));
+	}
 
-	
+
+
+
 	public void searchUser() throws SQLException {
 		String dni = viewEmployeeSale.getClientDniTxt().getText();
 		ResultSet clientCheck = modelEmployeeSale.searchClient(dni);
@@ -144,7 +140,10 @@ public class ControllerViewEmployeeSale implements ActionListener {
 		String price = viewEmployeeSale.getPriceProductTxt().getText();
 		String stock = viewEmployeeSale.getStockProductTxt().getText();
 		String cantity = viewEmployeeSale.getCantityProductTxt().getText();
-		
+		if(cantity.isEmpty()){
+			JOptionPane.showMessageDialog(null, "Please, Select the Cantity");
+			return;
+		}
 		ModelProduct product = new ModelProduct();
 		product.setBarcode(barcode);
 		product.setName(name);
@@ -170,19 +169,15 @@ public class ControllerViewEmployeeSale implements ActionListener {
 	public void deleteProductCart() {
 		String codeProduct = viewEmployeeSale.getCodeProductTxt().getText();
 
-		// 1. Check for empty code or cart
 		if (codeProduct.isEmpty() || cartShopping.getProducts().isEmpty()) {
-			// Handle the case where no product code is entered or the cart is empty
 			System.out.println("Please enter a product code or add products to your cart first.");
 			return;
 		}
 
-		// 2. Convert code to appropriate type (assuming barcode is a String)
 		String barcode = codeProduct; // Modify if barcode is an integer or other type
 
-		// 3. Iterate over cart and remove matching product(s)
 		ArrayList<ModelProduct> products = cartShopping.getProducts();
-		boolean productRemoved = false; // Flag to track if any product was removed
+		boolean productRemoved = false;
 		for (int i = 0; i < products.size(); i++) {
 			ModelProduct product = products.get(i);
 			if (product.getBarcode().equals(barcode)) {
