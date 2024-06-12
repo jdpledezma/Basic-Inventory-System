@@ -139,23 +139,6 @@ public ModelProduct(String barcode,String name,String price,String stock, String
 	        throw e;
 	    }
 	}
-
-	
-	
-	
-	public ResultSet getAllProductsWithCategory() throws SQLException {
-	    ResultSet result = null;
-	    try (Connection connect = modelConnect.connectDB()) {
-	      String sql = "SELECT p.id AS product_id, p.name AS product_name, c.name AS category_name " +
-	                   "FROM products p " +
-	                   "INNER JOIN categories c ON p.category_id = c.id;";
-	      PreparedStatement statement = connect.prepareStatement(sql);
-	      result = statement.executeQuery();
-	    } catch (SQLException e) {
-	      throw e; 
-	    }
-	    return result;
-	  }
 	
 	  public ResultSet getProduct(String barcode) {
 		    try {

@@ -76,7 +76,8 @@ public class ControllerViewEmployeeSale implements ActionListener {
 		}
 
 		double totalPrice = cartShopping.calculateTotal();
-		viewEmployeeSale.getTotalProductTxt().setText(String.valueOf(totalPrice));
+		String totalPriceStr = String.format("%.3f",totalPrice);
+		viewEmployeeSale.getTotalProductTxt().setText(totalPriceStr);
 	}
 
 
