@@ -60,6 +60,24 @@ public class ModelPDF {
         document.add(table);
         document.close();
     }
+
+    public void openPDF(String filePath) {
+        if (Desktop.isDesktopSupported()) {
+            Desktop desktop = Desktop.getDesktop();
+            try {
+                File file = new File(filePath);
+                if (file.exists()) {
+                    desktop.open(file);
+                } else {
+                    System.out.println("File does not exist: " + filePath);
+                }
+            } catch (Exception e) {
+                System.out.println("Failed to open PDF: " + e.getMessage());
+            }
+        } else {
+            System.out.println("Desktop is not supported on this platform.");
+        }
+    }
     
     
     public void generateBill(String dniClient,String nameClient, Double total, LocalDateTime dateNow, String newPdfFile,ArrayList<ModelProduct> cartBill ){
@@ -133,7 +151,6 @@ public class ModelPDF {
                 String productName = product.getName();
                 double productPrice = Double.parseDouble(product.getPrice());
                 int productCantity = Integer.parseInt(product.getCantity());
-                double productTotalPrice = productPrice * productCantity;
 
               
                 Paragraph productInfo = new  Paragraph();
@@ -169,5 +186,7 @@ public class ModelPDF {
     	
     	
     }
+
+
 
 }
