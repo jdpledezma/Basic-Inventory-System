@@ -251,6 +251,7 @@ public class ControllerViewEmployeeSale implements ActionListener {
 		viewEmployeeSale.getClientTelephoneTxt().setText("");
 		viewEmployeeSale.getClientDniTxt().setText("");
 		cartShopping.getProducts().clear();
+		JOptionPane.showMessageDialog(null, "Invoice Made Correctly ");
 		renderTable();
 	};
 	
@@ -287,6 +288,7 @@ public class ControllerViewEmployeeSale implements ActionListener {
 
 			ArrayList<ModelProduct> cart = cartShopping.getProducts();
 			bill();
+
 			cartShopping.updateStockBD(cart);
 			}
 			
